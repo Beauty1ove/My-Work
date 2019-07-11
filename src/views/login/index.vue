@@ -2,27 +2,42 @@
   <div class="login-container">
     <el-card class="login-box">
       <img src="../../assets/images/logo_index.png" />
-      <p>
-        <label for="user">用户名:</label>
-        <input type="text" id="user"/>
-      </p>
-      <p>
-        <label for="pwd">密&nbsp;&nbsp;&nbsp;码:</label>
-        <input type="password" id="pwd"/>
-      </p>
-      <p>
-        <input type="text" class="yzm" />
-        <input type="button" value="获取验证码" />
-      </p>
-      <p>
-        <input type="submit" value="登陆"/>
-      </p>
+      <el-form ref="form" :model="form">
+        <el-form-item>
+          <el-input v-model="form.phone"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="form.check" style="width:240px"></el-input>
+          <el-button style="float:right">发送验证码</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="agree">
+            我已阅读并同意
+            <a href>用户协议</a>
+            和
+            <a href>隐私条款</a>
+          </el-checkbox>
+        </el-form-item>
+        <el-form-item>
+          <el-button :disabled="!agree" style="width:100%" type="primary">登陆</el-button>
+        </el-form-item>
+      </el-form>
     </el-card>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      form: {
+        phone: '',
+        check: ''
+      },
+      agree: true
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">
@@ -34,8 +49,8 @@ export default {}
   left: 0;
   background: url("../../assets/images/login_bg.jpg") no-repeat center / cover;
   .login-box {
-    width: 400px;
-    height: 300px;
+    width: 430px;
+    height: 330px;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -45,33 +60,11 @@ export default {}
       display: block;
       margin: 0 auto;
     }
-    p {
-      text-align: right;
-      margin: 24px 30px;
-      label {
-        float: left;
-        line-height: 24px;
-      }
-      input {
-        width: 220px;
-        height: 20px;
-        border: 1px inset #ccc;
-        outline: 0;
-      }
-      .yzm {
-        width: 120px;
-        float: left;
-        vertical-align: middle;
-      }
-      input[type="button"] {
-        width: 80px;
-        height: 24px;
-      }
-      input[type="submit"] {
-        width: 50px;
-        height: 24px;
-        background-color: #fff;
-      }
+    .el-form-item {
+      margin-top: 20px;
+    }
+    a {
+      text-decoration: none;
     }
   }
 }
