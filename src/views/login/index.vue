@@ -1,13 +1,13 @@
 <template>
   <div class="login-container">
-    <el-card class="login-box">
+    <el-card class="login-box abcdefg">
       <img src="../../assets/images/logo_index.png" />
-      <el-form ref="form" :model="form">
-        <el-form-item>
-          <el-input v-model="form.phone"></el-input>
+      <el-form ref="checkForm" status-icon :model="loginForm" :rules="rules">
+        <el-form-item prop="mobile">
+          <el-input v-model="loginForm.mobile"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input v-model="form.check" style="width:240px"></el-input>
+        <el-form-item prop="code">
+          <el-input v-model="loginForm.code" style="width:240px"></el-input>
           <el-button style="float:right">发送验证码</el-button>
         </el-form-item>
         <el-form-item>
@@ -19,7 +19,7 @@
           </el-checkbox>
         </el-form-item>
         <el-form-item>
-          <el-button :disabled="!agree" style="width:100%" type="primary">登陆</el-button>
+          <el-button :disabled="!agree" style="width:100%" type="primary" @click="login()">登陆</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -29,12 +29,48 @@
 <script>
 export default {
   data () {
+    var checkPhone = (rule, value, callback) => {
+      if (/^1[3456789]\d{9}$/.test(value)) {
+        callback()
+      } else {
+        callback(new Error('请输入正确的手机号'))
+      }
+    }
     return {
-      form: {
-        phone: '',
-        check: ''
+      loginForm: {
+        mobile: '',
+        code: ''
       },
-      agree: true
+      agree: true,
+      rules: {
+        mobile: [
+          { required: true, message: '手机号不能为空' },
+          { validator: checkPhone, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '验证码不能为空' },
+          { length: 6, message: '请输入正确的6为验证码', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    login () {
+      this.$refs.checkForm.validate(valid => {
+        if (valid) {
+          this.$http
+            .post(
+              'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+              this.loginForm
+            )
+            .then(res => {
+              this.$router.push('/')
+            })
+            .catch(() => {
+              this.$message.error('手机号或验证码错误')
+            })
+        }
+      })
     }
   }
 }

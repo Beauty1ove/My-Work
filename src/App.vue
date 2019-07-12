@@ -5,13 +5,14 @@
 </template>
 
 <script>
-
 export default {
   name: 'app',
-  components: {
-  }
+  components: {}
 }
 </script>
 
 <style lang="less">
+.el-icon-circle-check {
+  color: green;
+}
 </style>
