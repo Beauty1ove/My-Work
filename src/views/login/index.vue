@@ -65,6 +65,7 @@ export default {
             )
             .then(res => {
               this.$router.push('/')
+              window.sessionStorage.setItem('user', JSON.stringify(res.data.data))
             })
             .catch(() => {
               this.$message.error('手机号或验证码错误')
