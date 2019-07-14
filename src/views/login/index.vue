@@ -60,12 +60,12 @@ export default {
         if (valid) {
           this.$http
             .post(
-              'http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+              '/authorizations',
               this.loginForm
             )
             .then(res => {
-              this.$router.push('/')
               window.sessionStorage.setItem('user', JSON.stringify(res.data.data))
+              this.$router.push('/')
             })
             .catch(() => {
               this.$message.error('手机号或验证码错误')
