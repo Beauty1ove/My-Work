@@ -46,21 +46,15 @@
       <el-header class="header">
         <span class="el-icon-s-fold" @click="toggleView()"></span>
         <span class="text">江苏传智播客科技教育有限公司</span>
-        <el-dropdown style="float:right">
+        <el-dropdown style="float:right" @command="handleCommand">
           <span class="el-dropdown-link">
-            <img
-              style="vertical-align:middle"
-              width="30"
-              height="30"
-              src="../../assets/images/avatar.jpg"
-              alt
-            />
-            <b style="vertical-align:middle;padding-left:5px">黑马小哥</b>
+            <img style="vertical-align:middle" width="30" height="30" :src="pic" alt />
+            <b style="vertical-align:middle;padding-left:5px">{{name}}</b>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock">退出登录</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-setting" command="setting">个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -71,14 +65,31 @@
 
 <script>
 export default {
+  created () {
+    const user = JSON.parse(window.sessionStorage.getItem('user'))
+    this.name = user.name
+    this.pic = user.photo
+  },
   data () {
     return {
-      collapse: false
+      collapse: false,
+      pic: '',
+      name: ''
     }
   },
   methods: {
     toggleView () {
       this.collapse = !this.collapse
+    },
+    setting () {
+      this.$router.push('/setting')
+    },
+    logout () {
+      window.sessionStorage.removeItem('user')
+      this.$router.push('/login')
+    },
+    handleCommand (command) {
+      this[command]()
     }
   }
 }
