@@ -58,7 +58,10 @@
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
+      <el-main>
+      <!-- 二级路由 -->
       <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>

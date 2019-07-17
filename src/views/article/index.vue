@@ -98,6 +98,10 @@ export default {
       num: 0
     }
   },
+  created () {
+    // 获取文件列表数据
+    this.getArticle()
+  },
   methods: {
     async getArticle () {
       const {
