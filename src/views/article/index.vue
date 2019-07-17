@@ -62,9 +62,9 @@
         </el-table-column>
         <el-table-column label="发布时间"></el-table-column>
         <el-table-column label="操作">
-          <template>
-            <el-button icon="el-icon-edit" plain type="primary" circle></el-button>
-            <el-button icon="el-icon-delete" plain type="danger" circle></el-button>
+          <template slot-scope="scope">
+            <el-button @click="edit(scope.row.id)" icon="el-icon-edit" plain type="primary" circle></el-button>
+            <el-button @click="del(scope.row.id)" icon="el-icon-delete" plain type="danger" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -129,6 +129,23 @@ export default {
       // 提交当前页码给后台 才能获取对应的数据
       this.formDate.page = newPage
       this.getArticle()
+    },
+    edit (id) {
+      this.$router.push(`/publish?id=${id}`)
+    },
+    del (id) {
+      this.$confirm('亲，此操作将永久删除该文章, 是否继续?', '温馨提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          await this.$http.delete(`articles/${id}`)
+          // 删除成功
+          this.$message.success('删除成功')
+          this.getArticles()
+        })
+        .catch(() => {})
     }
   }
 }
