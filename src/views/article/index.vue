@@ -15,9 +15,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select v-model="formDate.channel_id">
-            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
+          <my-channel v-model="formDate.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="日期：">
           <el-date-picker
@@ -100,16 +98,7 @@ export default {
       num: 0
     }
   },
-  created () {
-    this.getArticleList()
-  },
   methods: {
-    async getArticleList () {
-      const {
-        data: { data }
-      } = await this.$http.get('/channels')
-      this.options = data.channels
-    },
     async getArticle () {
       const {
         data: { data }
