@@ -48,7 +48,7 @@
             </el-image>
           </template>
         </el-table-column>
-        <el-table-column label="标题"></el-table-column>
+        <el-table-column label="标题" prop="title"></el-table-column>
         <el-table-column label="状态">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.status === 0" type="info">草稿</el-tag>
@@ -58,7 +58,7 @@
             <el-tag v-if="scope.row.status === 4" type="danger">已删除</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="发布时间"></el-table-column>
+        <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button @click="edit(scope.row.id)" icon="el-icon-edit" plain type="primary" circle></el-button>

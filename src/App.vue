@@ -11,8 +11,6 @@ export default {
 }
 </script>
 
-<style lang="less">
-.el-icon-circle-check {
-  color: green;
-}
+<style lang="less" scoped>
+
 </style>
