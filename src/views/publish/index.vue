@@ -6,26 +6,35 @@
       </div>
       <el-form :model="articleForm" label-width="100px">
         <el-form-item label="标题：">
-          <el-input v-model="articleForm.title" style="width:400px"></el-input>
+          <el-input v-model="articleForm.title" style="width:400px" placeholder="至少5个"></el-input>
         </el-form-item>
         <el-form-item label="内容：">
           <quill-editor v-model="articleForm.content" :options="editorOption"></quill-editor>
         </el-form-item>
         <el-form-item label="封面：">
-          <el-radio-group v-model="articleForm.cover.type">
+          <el-radio-group v-model="articleForm.cover.type" @change="changeType">
             <el-radio :label="1">单图</el-radio>
             <el-radio :label="3">三图</el-radio>
             <el-radio :label="0">无图</el-radio>
             <el-radio :label="-1">自动</el-radio>
           </el-radio-group>
-          <my-image v-model="articleForm.cover.images[0]"></my-image>
+          <!-- 单图 -->
+          <div v-if="articleForm.cover.type === 1">
+            <my-image v-model="articleForm.cover.images[0]"></my-image>
+          </div>
+          <!-- 三图 -->
+          <div v-if="articleForm.cover.type === 3">
+            <my-image v-model="articleForm.cover.images[0]"></my-image>
+            <my-image v-model="articleForm.cover.images[1]"></my-image>
+            <my-image v-model="articleForm.cover.images[2]"></my-image>
+          </div>
         </el-form-item>
         <el-form-item label="频道：">
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">发表</el-button>
-          <el-button>存入草稿</el-button>
+          <el-button type="primary" @click="publish(false)">发表</el-button>
+          <el-button >存入草稿</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -57,12 +66,25 @@ export default {
           toolbar: [
             ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block'],
-            [{ 'header': 1 }, { 'header': 2 }],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'indent': '-1' }, { 'indent': '+1' }]
+            [{ header: 1 }, { header: 2 }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ indent: '-1' }, { indent: '+1' }]
           ]
         }
       }
+    }
+  },
+  methods: {
+    // 发表和存入草稿
+    async publish (draft) {
+    // 校验数据  省略...
+      await this.$http.post(`/articles?draft=${draft}`, this.articleForm)
+      this.$message.success(!draft ? '发表成功' : '存入草稿成功')
+      this.$router.push('/article')
+    },
+    changeType () {
+    // 重新选中图片类型 清空图片数据
+      this.articleForm.cover.images = []
     }
   }
 }

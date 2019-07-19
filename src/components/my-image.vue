@@ -131,6 +131,10 @@ export default {
 </script>
 
 <style scoped lang='less'>
+.image-container{
+  display: inline-block;
+  margin-right: 20px;
+}
 .img-item {
   width: 150px;
   height: 120px;
