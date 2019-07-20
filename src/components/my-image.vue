@@ -102,6 +102,7 @@ export default {
         this.$emit('input', this.uploadImageUrl)
       }
       this.dialogVisible = false
+      this.selectedImageUrl = null
     },
     handleSuccess (res) {
       this.uploadImageUrl = res.data.url
