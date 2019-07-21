@@ -65,13 +65,13 @@ export default {
     async getUserInfo () {
       const {
         data: { data }
-      } = await this.$http.get('user/profile')
+      } = await this.$http.get('/user/profile')
       this.userForm = data
     },
     async upUser () {
       const {
         data: { data }
-      } = await this.$http.patch('user/profile', {
+      } = await this.$http.patch('/user/profile', {
         name: this.userForm.name,
         intro: this.userForm.intro,
         email: this.userForm.email
@@ -92,7 +92,7 @@ export default {
       // 获取图片对象  data.file 获取
       const formData = new FormData()
       formData.append('photo', data.file)
-      this.$http.patch('user/photo', formData).then(res => {
+      this.$http.patch('/user/photo', formData).then(res => {
         const url = res.data.data.photo
         // 修改头像成功  res.data.data.photo  地址
         this.$message.success('修改头像成功')
