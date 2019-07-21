@@ -20,7 +20,7 @@
               <el-input v-model="userForm.email"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary">保存设置</el-button>
+              <el-button type="primary" @click="upUser">保存设置</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -30,6 +30,7 @@
             class="avatar-uploader"
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
+            :http-request="myUpload"
           >
             <img v-if="userForm.photo" :src="userForm.photo" class="avatar" />
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import eventBus from '@/eventBus/index.js'
 export default {
   data () {
     return {
@@ -65,6 +67,43 @@ export default {
         data: { data }
       } = await this.$http.get('user/profile')
       this.userForm = data
+    },
+    async upUser () {
+      const {
+        data: { data }
+      } = await this.$http.patch('user/profile', {
+        name: this.userForm.name,
+        intro: this.userForm.intro,
+        email: this.userForm.email
+      })
+      this.$message.success('修改用户信息成功')
+      // 传当前修改的用户名称给home组件 修改home组件的数据 用户名称
+      eventBus.$emit('updateHeaderName', data.name)
+      // 修改本地数据
+      const userMessage = JSON.parse(
+        window.sessionStorage.getItem('user')
+      )
+      userMessage.name = data.name
+      window.sessionStorage.setItem('user', JSON.stringify(userMessage))
+    },
+    myUpload (data) {
+      // 阿里百秀 自己来上传图片，使用xhr配合formData进行图片上传
+      // 现在     自己来上传图片，使用axios配合formData进行图片上传
+      // 获取图片对象  data.file 获取
+      const formData = new FormData()
+      formData.append('photo', data.file)
+      this.$http.patch('user/photo', formData).then(res => {
+        const url = res.data.data.photo
+        // 修改头像成功  res.data.data.photo  地址
+        this.$message.success('修改头像成功')
+        this.userForm.photo = url
+        // 更新home组件的头像
+        eventBus.$emit('updateHeaderPhoto', url)
+        // 修改本地数据
+        const userMessage = JSON.parse(window.sessionStorage.getItem('user'))
+        userMessage.photo = url
+        window.sessionStorage.setItem('user', JSON.stringify(userMessage))
+      })
     }
   }
 }

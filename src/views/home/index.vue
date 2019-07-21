@@ -67,11 +67,19 @@
 </template>
 
 <script>
+import eventBus from '@/eventBus/index.js'
 export default {
   created () {
     const user = JSON.parse(window.sessionStorage.getItem('user'))
     this.name = user.name
     this.pic = user.photo
+    // 绑定提交用户名称的事件
+    eventBus.$on('updateHeaderName', (name) => {
+      this.name = name
+    })
+    eventBus.$on('updateHeaderPhoto', (url) => {
+      this.pic = url
+    })
   },
   data () {
     return {
